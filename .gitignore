@@ -49,3 +49,6 @@ lixeira/
 
 # ===== Mock API =====
 mock/db.json
+
+database/banco_atual_completo.sql
+database/banco_online_atual.sql

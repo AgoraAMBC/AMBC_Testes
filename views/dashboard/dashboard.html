@@ -1,15 +1,136 @@
-﻿<!-- =========================================================
+<!-- =========================================================
   View: Painel
   Descricao: Visao geral da AMBC
-  Projeto: AMBC-V2
 ========================================================= -->
-<section class="view view--placeholder" data-view="Painel">
-  <header class="view__header">
-    <h1 class="view__title">Painel</h1>
-    <p class="view__subtitle">Visao geral da AMBC</p>
+<section class="dashboard view" data-view="Painel">
+  <header class="dashboard__cabecalho">
+    <div>
+      <h1 class="dashboard__titulo">Ola, Administrador</h1>
+      <p class="dashboard__subtitulo">Bem-vindo ao sistema de gestao AMBC. Aqui esta um resumo do dia.</p>
+    </div>
+
+    <div class="dashboard__acoes">
+      <span class="dashboard__mes" id="dashboard-mes-atual" aria-live="polite">Mes atual</span>
+      <a class="btn btn-primario" href="#/financeiro/novo-lancamento">
+        <span class="material-icons" aria-hidden="true">add</span>
+        Novo Lancamento
+      </a>
+    </div>
   </header>
 
-  <div class="view__content">
-    <p>Conteudo do modulo <strong>Painel</strong> sera implementado em breve.</p>
+  <div class="dashboard__cards" aria-label="Resumo geral">
+    <article class="card dashboard-card" data-card="associados">
+      <div class="dashboard-card__topo">
+        <span class="dashboard-card__icone dashboard-card__icone--associados">
+          <span class="material-icons" aria-hidden="true">groups</span>
+        </span>
+        <span class="dashboard-card__variacao" data-card-variacao>0.0%</span>
+      </div>
+      <p class="dashboard-card__label">Associados</p>
+      <p class="dashboard-card__valor" data-card-total>0</p>
+    </article>
+
+    <article class="card dashboard-card" data-card="dependentes">
+      <div class="dashboard-card__topo">
+        <span class="dashboard-card__icone dashboard-card__icone--dependentes">
+          <span class="material-icons" aria-hidden="true">family_restroom</span>
+        </span>
+        <span class="dashboard-card__variacao" data-card-variacao>0.0%</span>
+      </div>
+      <p class="dashboard-card__label">Dependentes</p>
+      <p class="dashboard-card__valor" data-card-total>0</p>
+    </article>
+
+    <article class="card dashboard-card" data-card="parceiros">
+      <div class="dashboard-card__topo">
+        <span class="dashboard-card__icone dashboard-card__icone--parceiros">
+          <span class="material-icons" aria-hidden="true">handshake</span>
+        </span>
+        <span class="dashboard-card__variacao" data-card-variacao>0.0%</span>
+      </div>
+      <p class="dashboard-card__label">Parceiros</p>
+      <p class="dashboard-card__valor" data-card-total>0</p>
+    </article>
+
+    <article class="card dashboard-card" data-card="resultado-mes">
+      <div class="dashboard-card__topo">
+        <span class="dashboard-card__icone dashboard-card__icone--financeiro">
+          <span class="material-icons" aria-hidden="true">account_balance_wallet</span>
+        </span>
+        <span class="dashboard-card__variacao" data-card-variacao>0.0%</span>
+      </div>
+      <p class="dashboard-card__label">Resultado mes</p>
+      <p class="dashboard-card__valor" data-card-total>R$ 0,00</p>
+    </article>
   </div>
+
+  <div class="dashboard__graficos">
+    <article class="card dashboard-panel dashboard-panel--grafico">
+      <div class="card__cabecalho">
+        <h2 class="card__titulo">
+          <span class="material-icons" aria-hidden="true">bar_chart</span>
+          Receita vs despesa - ultimos 6 meses
+        </h2>
+      </div>
+      <div class="dashboard-panel__corpo">
+        <canvas class="dashboard-chart" id="grafico-receita-despesa" width="720" height="300"></canvas>
+        <div class="dashboard__legenda-inline" aria-hidden="true">
+          <span><i class="dashboard-dot dashboard-dot--receita"></i>Receita</span>
+          <span><i class="dashboard-dot dashboard-dot--despesa"></i>Despesa</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="card dashboard-panel">
+      <div class="card__cabecalho">
+        <h2 class="card__titulo">
+          <span class="material-icons" aria-hidden="true">donut_large</span>
+          Distribuicao por tipo
+        </h2>
+      </div>
+      <div class="dashboard-panel__corpo dashboard-panel__corpo--distribuicao">
+        <div class="dashboard-donut" id="dashboard-distribuicao" role="img" aria-label="Distribuicao por tipo">
+          <div class="dashboard-donut__centro">
+            <strong data-dist-total>0</strong>
+            <span>Total</span>
+          </div>
+        </div>
+
+        <ul class="dashboard-lista" aria-label="Totais por tipo">
+          <li><span><i class="dashboard-dot dashboard-dot--associados"></i>Associados</span><strong data-dist="associados">0</strong></li>
+          <li><span><i class="dashboard-dot dashboard-dot--dependentes"></i>Dependentes</span><strong data-dist="dependentes">0</strong></li>
+          <li><span><i class="dashboard-dot dashboard-dot--parceiros"></i>Parceiros</span><strong data-dist="parceiros">0</strong></li>
+        </ul>
+      </div>
+    </article>
+  </div>
+
+  <article class="card dashboard-panel">
+    <div class="card__cabecalho">
+      <h2 class="card__titulo">
+        <span class="material-icons" aria-hidden="true">receipt_long</span>
+        Ultimas transacoes
+      </h2>
+      <a class="btn btn-secundario btn-sm" href="#/financeiro/visao-geral">Ver todas</a>
+    </div>
+
+    <div class="tabela-wrapper">
+      <table class="tabela dashboard-tabela" data-tabela="ultimas-transacoes">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Descricao</th>
+            <th>Categoria</th>
+            <th>Valor</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="5" class="tabela__vazio">Carregando...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
 </section>
