@@ -96,13 +96,13 @@ function buscarResultadoMes(PDO $pdo, bool $temTipoContaRegente, string $dataRef
         $stmt = $pdo->query("
             SELECT COALESCE(
                 SUM(CASE
-                    WHEN cr.tipo = 'receita' THEN c.valor_total
-                    WHEN cr.tipo = 'despesa' THEN -c.valor_total
-                    ELSE c.valor_total
+                    WHEN cr.tipo = 'receita' THEN c.valor
+                    WHEN cr.tipo = 'despesa' THEN -c.valor
+                    ELSE c.valor
                 END),
                 0
             ) AS resultado
-            FROM conta c
+            FROM lancamento c
             LEFT JOIN conta_regente cr ON cr.id_conta_regente = c.fk_conta_regente
             LEFT JOIN status_conta sc ON sc.id_status_conta = c.fk_status_conta
             WHERE (LOWER(sc.descricao) = 'liquidado' OR c.fk_status_conta = 2)
@@ -112,8 +112,8 @@ function buscarResultadoMes(PDO $pdo, bool $temTipoContaRegente, string $dataRef
     }
 
     $stmt = $pdo->query("
-        SELECT COALESCE(SUM(c.valor_total), 0) AS resultado
-        FROM conta c
+        SELECT COALESCE(SUM(c.valor), 0) AS resultado
+        FROM lancamento c
         LEFT JOIN status_conta sc ON sc.id_status_conta = c.fk_status_conta
         WHERE (LOWER(sc.descricao) = 'liquidado' OR c.fk_status_conta = 2)
           AND DATE_TRUNC('month', c.data_lancamento) = DATE_TRUNC('month', {$dataReferenciaSql})
@@ -126,9 +126,9 @@ function buscarGraficoFinanceiro(PDO $pdo, bool $temTipoContaRegente): array {
         $stmt = $pdo->query("
             SELECT
                 TO_CHAR(DATE_TRUNC('month', c.data_lancamento), 'YYYY-MM') AS mes,
-                COALESCE(SUM(CASE WHEN cr.tipo = 'receita' THEN c.valor_total ELSE 0 END), 0) AS receita,
-                COALESCE(SUM(CASE WHEN cr.tipo = 'despesa' THEN c.valor_total ELSE 0 END), 0) AS despesa
-            FROM conta c
+                COALESCE(SUM(CASE WHEN cr.tipo = 'receita' THEN c.valor ELSE 0 END), 0) AS receita,
+                COALESCE(SUM(CASE WHEN cr.tipo = 'despesa' THEN c.valor ELSE 0 END), 0) AS despesa
+            FROM lancamento c
             LEFT JOIN conta_regente cr ON cr.id_conta_regente = c.fk_conta_regente
             LEFT JOIN status_conta sc ON sc.id_status_conta = c.fk_status_conta
             WHERE (LOWER(sc.descricao) = 'liquidado' OR c.fk_status_conta = 2)
@@ -140,9 +140,9 @@ function buscarGraficoFinanceiro(PDO $pdo, bool $temTipoContaRegente): array {
         $stmt = $pdo->query("
             SELECT
                 TO_CHAR(DATE_TRUNC('month', c.data_lancamento), 'YYYY-MM') AS mes,
-                COALESCE(SUM(c.valor_total), 0) AS receita,
+                COALESCE(SUM(c.valor), 0) AS receita,
                 0 AS despesa
-            FROM conta c
+            FROM lancamento c
             LEFT JOIN status_conta sc ON sc.id_status_conta = c.fk_status_conta
             WHERE (LOWER(sc.descricao) = 'liquidado' OR c.fk_status_conta = 2)
               AND c.data_lancamento >= DATE_TRUNC('month', CURRENT_DATE - INTERVAL '5 months')
@@ -182,15 +182,15 @@ function buscarUltimasTransacoes(PDO $pdo, bool $temTipoContaRegente): array {
 
     $stmt = $pdo->query("
         SELECT
-            c.id_conta,
+            c.id_lancamento AS id_conta,
             c.descricao,
-            c.valor_total,
+            c.valor AS valor_total,
             TO_CHAR(c.data_lancamento, 'YYYY-MM-DD') AS data_lancamento,
             sc.descricao AS status,
             cr.descricao AS categoria,
             {$campoTipo} AS tipo,
             a.nome AS associado
-        FROM conta c
+        FROM lancamento c
         LEFT JOIN status_conta sc ON sc.id_status_conta = c.fk_status_conta
         LEFT JOIN conta_regente cr ON cr.id_conta_regente = c.fk_conta_regente
         LEFT JOIN associado a ON a.id_associado = c.fk_associado

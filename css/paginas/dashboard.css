@@ -143,6 +143,10 @@
   line-height: var(--lh-tight);
 }
 
+.dashboard-card__valor--carregando {
+  color: var(--texto-secundario);
+}
+
 .dashboard__graficos {
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);

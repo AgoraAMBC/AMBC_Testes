@@ -50,6 +50,7 @@ const DashboardPage = {
 
     if (elTotal) {
       elTotal.textContent = isMoeda ? this._formatarMoeda(total) : total.toLocaleString('pt-BR');
+      elTotal.classList.remove('dashboard-card__valor--carregando');
     }
 
     if (elVariacao) {
